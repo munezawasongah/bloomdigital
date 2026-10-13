@@ -37,7 +37,8 @@ module.exports = (db) => {
     const garden = db.get('gardens').find({ shareId: req.params.shareId }).value();
     if (!garden) return res.status(404).json({ error: 'Garden not found' });
 
-    const base  = (process.env.BASE_URL || `http://localhost:${process.env.PORT || 3000}`).replace(/\/$/, '');
+    // BASE_URL if set, otherwise derive the public address from the request
+    const base  = (process.env.BASE_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
     const link  = `${base}/garden/${garden.shareId}`;
     const emoji = { love:'💕', congratulations:'🎉', apology:'🕊️', condolences:'🤍', birthday:'🎂', gratitude:'🙏' };
     const icon  = emoji[garden.msgType] || '🌸';

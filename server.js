@@ -19,6 +19,7 @@ const db      = low(adapter);
 db.defaults({ gardens: [] }).write();
 
 const app = express();
+app.set('trust proxy', 1); // so req.protocol is https behind Railway/Render
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
